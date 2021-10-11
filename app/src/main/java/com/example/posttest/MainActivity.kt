@@ -11,7 +11,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
-
+    lateinit var buttonUpdate: Button
     lateinit var buttonNew: Button
     lateinit var rvUsers: RecyclerView
 
@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        buttonUpdate = findViewById(R.id.buttonUpdate)
         buttonNew = findViewById(R.id.buttonNew)
         rvUsers = findViewById(R.id.rvUsers)
         allTheUsers = ArrayList()
@@ -39,9 +40,10 @@ class MainActivity : AppCompatActivity() {
                 val resource: List<UsersList?>? = response.body()
                 if (resource != null){
                     for (i in resource){
+                        val userPk = i?.pk
                         val userName = i?.name
                         val userLocation = i?.location
-                        allTheUsers.add("${userName.toString()}" + " " + "${userLocation.toString()}")
+                        allTheUsers.add("${userPk.toString()}" + " " + "${userName.toString()}" + " " + "${userLocation.toString()}")
                         rvUsers.adapter?.notifyDataSetChanged()
                         rvUsers.scrollToPosition(allTheUsers.size-1)
                     }
@@ -53,6 +55,10 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
+        buttonUpdate.setOnClickListener{
+            val intent = Intent(this, MainActivity3::class.java)
+            startActivity(intent)
+        }
         buttonNew.setOnClickListener{
             val intent = Intent(this, MainActivity2::class.java)
             startActivity(intent)
